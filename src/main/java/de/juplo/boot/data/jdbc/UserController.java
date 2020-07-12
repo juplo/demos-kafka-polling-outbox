@@ -52,6 +52,18 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    @DeleteMapping("{username}")
+    public ResponseEntity<User> removeUser(@PathVariable String username) {
+        User user = repository.findByUsername(UserController.sanitize(username));
+
+        if (user == null)
+            return ResponseEntity.notFound().build();
+
+        repository.delete(user);
+
+        return ResponseEntity.ok(user);
+    }
+
     @GetMapping()
     public ResponseEntity<Iterable<User>> getUsers() {
         return ResponseEntity.ok(repository.findAll());
