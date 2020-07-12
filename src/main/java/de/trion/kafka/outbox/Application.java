@@ -2,49 +2,13 @@ package de.trion.kafka.outbox;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
-@EnableConfigurationProperties(ApplicationProperties.class)
 public class Application {
 
     private final static Logger LOG = LoggerFactory.getLogger(Application.class);
-
-
-    @Autowired
-    ApplicationProperties properties;
-
-
-    @Bean
-    public String bootstrapServers() { return properties.bootstrapServers; }
-
-    @Bean
-    public String topic() {
-        return properties.topic;
-    }
-
-    @Bean
-    public String consumerGroup() {
-        return properties.consumerGroup;
-    }
-
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry
-                        .addMapping("/**")
-                        .allowedOrigins("http://localhost:4200");
-            }
-        };
-    }
 
 
     public static void main(String[] args) {
