@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -26,15 +27,19 @@ public class OutboxController {
     }
 
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Void> getVorgang(
-            UriComponentsBuilder builder,
+            ServletUriComponentsBuilder builder,
             @RequestBody String username) {
         String cleaned = username.trim().toLowerCase();
         User user = new User(cleaned, LocalDateTime.now(), false);
         repository.save(user);
         // TODO: Not-Unique Fehler auslösen
-        UriComponents uri = builder.path("{username}").buildAndExpand(cleaned);
+        UriComponents uri =
+                builder
+                    .fromCurrentRequest()
+                    .path("{username}")
+                    .buildAndExpand(cleaned);
         return ResponseEntity.created(uri.toUri()).build();
     }
 }
