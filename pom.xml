@@ -8,11 +8,11 @@
      <version>2.1.5.RELEASE</version>
      <relativePath/> <!-- lookup parent from repository -->
    </parent>
-   <groupId>de.trion.kafka</groupId>
+   <groupId>de.juplo.boot.data</groupId>
    <artifactId>outbox</artifactId>
    <version>0.0.1-SNAPSHOT</version>
-   <name>Polling-Outbox-Pattern</name>
-   <description>Implementierung des Outbox-Patterns auf Basis von JDBC</description>
+   <name>jdbc</name>
+   <description>Eine Simple Web-Anwendung auf Basis von spring-boot-data-jdbc</description>
 
    <properties>
      <java.version>1.8</java.version>
