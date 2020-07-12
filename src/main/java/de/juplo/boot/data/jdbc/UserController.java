@@ -27,13 +27,12 @@ public class UserController {
 
 
     @PostMapping
-    public ResponseEntity<Void> getVorgang(
+    public ResponseEntity<Void> createUser(
             ServletUriComponentsBuilder builder,
             @RequestBody String username) {
         String sanitizedUsername = UserController.sanitize(username);
         User user = new User(sanitizedUsername, LocalDateTime.now(), false);
         repository.save(user);
-        // TODO: Not-Unique Fehler auslösen
         UriComponents uri =
             builder
                 .fromCurrentRequest()
