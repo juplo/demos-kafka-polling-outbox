@@ -9,9 +9,9 @@
      <relativePath/> <!-- lookup parent from repository -->
    </parent>
    <groupId>de.juplo.boot.data</groupId>
-   <artifactId>outbox</artifactId>
+   <artifactId>jdbc</artifactId>
    <version>0.0.1-SNAPSHOT</version>
-   <name>jdbc</name>
+   <name>data-jdbc</name>
    <description>Eine Simple Web-Anwendung auf Basis von spring-boot-data-jdbc</description>
 
    <properties>
