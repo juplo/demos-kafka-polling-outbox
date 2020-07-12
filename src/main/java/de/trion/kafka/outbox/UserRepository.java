@@ -7,5 +7,5 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 public interface UserRepository extends CrudRepository<User, Long> {
     @Query("select * from User u where u.username = :username")
-    User findByEmailAddress(@Param("email") String username);
+    User findByUsername(@Param("email") String username);
 }
