@@ -31,15 +31,32 @@ public class OutboxController {
     public ResponseEntity<Void> getVorgang(
             ServletUriComponentsBuilder builder,
             @RequestBody String username) {
-        String cleaned = username.trim().toLowerCase();
-        User user = new User(cleaned, LocalDateTime.now(), false);
+        String sanitizedUsername = OutboxController.sanitize(username);
+        User user = new User(sanitizedUsername, LocalDateTime.now(), false);
         repository.save(user);
         // TODO: Not-Unique Fehler auslösen
         UriComponents uri =
-                builder
-                    .fromCurrentRequest()
-                    .path("{username}")
-                    .buildAndExpand(cleaned);
+            builder
+                .fromCurrentRequest()
+                .path("{username}")
+                .buildAndExpand(sanitizedUsername);
         return ResponseEntity.created(uri.toUri()).build();
+    }
+
+    @GetMapping("{username}")
+    public ResponseEntity<User> getUser(@PathVariable String username) {
+        User user = repository.findByUsername(OutboxController.sanitize(username));
+
+        if (user == null)
+            return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok(user);
+    }
+
+    private static String sanitize(String string) {
+        if (string == null)
+            return "";
+
+        return string.trim().toLowerCase();
     }
 }
