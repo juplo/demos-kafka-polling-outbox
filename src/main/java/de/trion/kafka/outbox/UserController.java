@@ -7,22 +7,21 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDateTime;
 
 @RestController
 @Transactional
 @RequestMapping("/users")
-public class OutboxController {
+public class UserController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OutboxController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
 
     private final UserRepository repository;
 
 
-    public OutboxController(UserRepository repository) {
+    public UserController(UserRepository repository) {
         this.repository = repository;
     }
 
@@ -31,7 +30,7 @@ public class OutboxController {
     public ResponseEntity<Void> getVorgang(
             ServletUriComponentsBuilder builder,
             @RequestBody String username) {
-        String sanitizedUsername = OutboxController.sanitize(username);
+        String sanitizedUsername = UserController.sanitize(username);
         User user = new User(sanitizedUsername, LocalDateTime.now(), false);
         repository.save(user);
         // TODO: Not-Unique Fehler auslösen
@@ -45,13 +44,19 @@ public class OutboxController {
 
     @GetMapping("{username}")
     public ResponseEntity<User> getUser(@PathVariable String username) {
-        User user = repository.findByUsername(OutboxController.sanitize(username));
+        User user = repository.findByUsername(UserController.sanitize(username));
 
         if (user == null)
             return ResponseEntity.notFound().build();
 
         return ResponseEntity.ok(user);
     }
+
+    @GetMapping()
+    public ResponseEntity<Iterable<User>> getUsers() {
+        return ResponseEntity.ok(repository.findAll());
+    }
+
 
     private static String sanitize(String string) {
         if (string == null)
