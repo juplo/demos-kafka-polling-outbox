@@ -32,7 +32,11 @@ public class UserController {
             @RequestBody String username) {
         String sanitizedUsername = UserController.sanitize(username);
         User user = new User(sanitizedUsername, LocalDateTime.now(), false);
+
+        // Ein Fehler wegen doppeltem username verhindert das Speichern
         repository.save(user);
+        user = repository.findByUsername(sanitizedUsername);
+
         UriComponents uri =
             builder
                 .fromCurrentRequest()
