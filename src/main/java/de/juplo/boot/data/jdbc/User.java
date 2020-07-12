@@ -1,4 +1,4 @@
-package de.trion.kafka.outbox;
+package de.juplo.boot.data.jdbc;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;

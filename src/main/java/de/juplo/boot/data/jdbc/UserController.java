@@ -1,4 +1,4 @@
-package de.trion.kafka.outbox;
+package de.juplo.boot.data.jdbc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
