@@ -1,6 +1,6 @@
 package de.trion.kafka.outbox;
 
-public class Event {
+public class UserEvent {
     public enum Type { CREATED, LOGIN, LOGOUT, DELETED }
 
     Long id;

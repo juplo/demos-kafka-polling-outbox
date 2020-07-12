@@ -3,7 +3,6 @@ package de.trion.kafka.outbox;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.common.serialization.LongSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +34,7 @@ public class OutboxProducer {
     }
 
 
-    public void send(Event event) {
+    public void send(UserEvent event) {
         try {
             String json = mapper.writeValueAsString(event);
             ProducerRecord<String, String> record = new ProducerRecord<>(topic, event.user, json);
