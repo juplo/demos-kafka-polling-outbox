@@ -30,10 +30,11 @@ public class OutboxController {
     public ResponseEntity<Void> getVorgang(
             UriComponentsBuilder builder,
             @RequestBody String username) {
-        User user = new User(username, LocalDateTime.now(), false);
+        String cleaned = username.trim().toLowerCase();
+        User user = new User(cleaned, LocalDateTime.now(), false);
         repository.save(user);
         // TODO: Not-Unique Fehler auslösen
-        UriComponents uri = builder.path("/{username}").buildAndExpand(username);
+        UriComponents uri = builder.path("{username}").buildAndExpand(cleaned);
         return ResponseEntity.created(uri.toUri()).build();
     }
 }
