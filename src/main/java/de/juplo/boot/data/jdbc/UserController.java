@@ -40,7 +40,7 @@ public class UserController {
         UriComponents uri =
             builder
                 .fromCurrentRequest()
-                .path("{username}")
+                .pathSegment("{username}")
                 .buildAndExpand(sanitizedUsername);
         return ResponseEntity.created(uri.toUri()).build();
     }
