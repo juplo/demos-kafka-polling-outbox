@@ -2,6 +2,7 @@ package de.juplo.boot.data.jdbc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
 import java.time.LocalDateTime;
+
+import static de.juplo.boot.data.jdbc.UserEvent.Type.CREATED;
+import static de.juplo.boot.data.jdbc.UserEvent.Type.DELETED;
 
 @RestController
 @Transactional
@@ -19,10 +23,15 @@ public class UserController {
 
 
     private final UserRepository repository;
+    private final ApplicationEventPublisher publisher;
 
 
-    public UserController(UserRepository repository) {
+    public UserController(
+            UserRepository repository,
+            ApplicationEventPublisher publisher)
+    {
         this.repository = repository;
+        this.publisher = publisher;
     }
 
 
@@ -33,6 +42,7 @@ public class UserController {
         String sanitizedUsername = UserController.sanitize(username);
         User user = new User(sanitizedUsername, LocalDateTime.now(), false);
         repository.save(user);
+        publisher.publishEvent(new UserEvent(this, CREATED, sanitizedUsername));
         UriComponents uri =
             builder
                 .fromCurrentRequest()
@@ -59,6 +69,7 @@ public class UserController {
             return ResponseEntity.notFound().build();
 
         repository.delete(user);
+        publisher.publishEvent(new UserEvent(this, DELETED, username));
 
         return ResponseEntity.ok(user);
     }
