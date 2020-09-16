@@ -6,10 +6,14 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 
 import static de.juplo.boot.data.jdbc.UserEvent.Type.CREATED;
@@ -94,10 +98,19 @@ public class UserController {
 
     @ExceptionHandler
     public ResponseEntity<?> incorrectResultSizeDataAccessException(
+        HttpServletRequest request,
         IncorrectResultSizeDataAccessException e
         )
     {
-      LOG.info("User already exists!");
+      String username;
+      try {
+          username = StreamUtils.copyToString(request.getInputStream(), Charset.defaultCharset());
+      }
+      catch (IOException ioe)
+      {
+        username = e.getMessage() + " -> " + ioe.getMessage();
+      }
+      LOG.info("User {} already exists!", username);
       return ResponseEntity.badRequest().build();
     }
 }
