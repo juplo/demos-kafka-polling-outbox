@@ -30,7 +30,9 @@ services:
       - 8080:8080
     environment:
       GPS_BOOTSTRAP_SERVERS: kafka:9093
-      SPRING_PROFILES_ACTIVE: production
+      spring.datasource.url: jdbc:postgres://postgres:5432/outbox
+      spring.datasource.username: outbox
+      spring.datasource.password: outbox
 
   postgres:
     image: postgres:13
