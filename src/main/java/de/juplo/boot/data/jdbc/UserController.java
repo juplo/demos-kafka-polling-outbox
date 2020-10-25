@@ -1,5 +1,6 @@
 package de.juplo.boot.data.jdbc;
 
+import de.juplo.kafka.outbox.OutboxEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
@@ -55,7 +56,7 @@ public class UserController {
         // Triggering a unique-error for username prevents persistence
         repository.save(user);
         publisher.publishEvent(
-            new UserEvent(
+            new OutboxEvent(
                 this,
                 sanitizedUsername,
                 CREATED,
@@ -89,7 +90,7 @@ public class UserController {
 
         repository.delete(user);
         publisher.publishEvent(
-            new UserEvent(
+            new OutboxEvent(
                 this,
                 user.getUsername(),
                 DELETED,
