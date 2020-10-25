@@ -4,18 +4,14 @@ services:
   zookeeper:
     image: "confluentinc/cp-zookeeper:latest"
     hostname: zookeeper
-    networks:
-      - tx
     ports:
       - 2181:2181
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
 
   kafka:
-    image: "confluentinc/cp-kafka:latest"
+    image: confluentinc/cp-kafka:latest
     hostname: kafka
-    networks:
-      - tx
     depends_on:
       - zookeeper
     ports:
@@ -29,9 +25,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
 
   outbox:
-    image: "outbox:latest"
-    networks:
-      - tx
+    image: outbox:latest
     ports:
       - 8080:8080
     environment:
@@ -39,6 +33,15 @@ services:
     depends_on:
       - kafka
 
-networks:
-  tx:
-    driver: bridge
+  postgres
+    image: postgres:13
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: outbox
+      POSTGRES_PASSWORD: outbox
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+
+volumes:
+  pgdata
