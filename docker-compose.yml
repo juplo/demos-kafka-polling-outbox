@@ -33,7 +33,7 @@ services:
     depends_on:
       - kafka
 
-  postgres
+  postgres:
     image: postgres:13
     ports:
       - 5432:5432
@@ -44,4 +44,4 @@ services:
       - pgdata:/var/lib/postgresql/data/
 
 volumes:
-  pgdata
+  pgdata:
