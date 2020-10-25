@@ -14,6 +14,6 @@ public class UserEventListener
     @TransactionalEventListener
     public void onUserEvent(UserEvent event)
     {
-        LOG.info("{}: {}", event.getStatus(), event.getKey());
+        LOG.info("{}: {}", event.getValue(), event.getKey());
     }
 }
