@@ -1,5 +1,6 @@
 package de.juplo.boot.data.jdbc;
 
+import de.juplo.kafka.outbox.OutboxEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -12,8 +13,8 @@ public class OutboxListener
 
 
     @TransactionalEventListener
-    public void onUserEvent(UserEvent event)
+    public void onUserEvent(OutboxEvent event)
     {
-        LOG.info("{}: {}", event.getV, event.user);
+        LOG.info("{}: {}", event.getValue(), event.getKey());
     }
 }
