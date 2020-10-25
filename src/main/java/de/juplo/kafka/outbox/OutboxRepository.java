@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 
 @Repository
@@ -15,7 +16,7 @@ import java.time.ZonedDateTime;
 public class OutboxRepository
 {
   private static final String SQL_QUERY =
-      "SELECT id, key, value FROM outbox WHERE id > ?";
+      "SELECT id, key, value FROM outbox WHERE id > :sequenceNumber";
   private static final String SQL_UPDATE =
       "INSERT INTO outbox (key, value, issued) VALUES (:key, :value, :issued)";
 
@@ -33,6 +34,8 @@ public class OutboxRepository
 
   public List<OutboxItem> fetch(@NotNull Long sequenceNumber)
   {
+    MapSqlParameterSource parameters = new MapSqlParameterSource();
+    parameters.addValue("sequenceNumber", sequenceNumber);
     return
         jdbcTemplate.query(SQL_QUERY, (resultSet, rowNumber) ->
             {
@@ -44,6 +47,7 @@ public class OutboxRepository
                       .value(resultSet.getString(2))
                       .build();
             },
-            sequenceNumber);
+            parameters
+            );
   }
 }
