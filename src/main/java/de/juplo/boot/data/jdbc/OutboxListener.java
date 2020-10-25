@@ -14,6 +14,6 @@ public class OutboxListener
     @TransactionalEventListener
     public void onUserEvent(UserEvent event)
     {
-        LOG.info("{}: {}", event.type, event.user);
+        LOG.info("{}: {}", event.getV, event.user);
     }
 }

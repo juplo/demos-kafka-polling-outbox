@@ -1,5 +1,6 @@
 package de.juplo.boot.data.jdbc;
 
+import de.juplo.kafka.outbox.OutboxEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
@@ -16,8 +17,9 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 
-import static de.juplo.boot.data.jdbc.UserEvent.Type.CREATED;
-import static de.juplo.boot.data.jdbc.UserEvent.Type.DELETED;
+import static de.juplo.boot.data.jdbc.UserEvent.CREATED;
+import static de.juplo.boot.data.jdbc.UserEvent.DELETED;
+
 
 @RestController
 @Transactional
@@ -49,7 +51,7 @@ public class UserController {
 
         // Triggering a unique-error for username prevents persistence
         repository.save(user);
-        publisher.publishEvent(new UserEvent(this, CREATED, sanitizedUsername));
+        publisher.publishEvent(new OutboxEvent(this, sanitizedUsername, CREATED));
         user = repository.findByUsername(sanitizedUsername);
 
         UriComponents uri =
@@ -78,7 +80,7 @@ public class UserController {
             return ResponseEntity.notFound().build();
 
         repository.delete(user);
-        publisher.publishEvent(new UserEvent(this, DELETED, username));
+        publisher.publishEvent(new OutboxEvent(this, username, DELETED));
 
         return ResponseEntity.ok(user);
     }

@@ -1,16 +1,24 @@
 package de.juplo.kafka.outbox;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Value;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 import org.springframework.context.ApplicationEvent;
 
 
-@Builder
-@Data
-@Value
+@ToString
+@EqualsAndHashCode
 public class OutboxEvent extends ApplicationEvent
 {
+  @Getter
   private final String key;
-  private final String value;
+  @Getter private final Object value;
+
+
+  public OutboxEvent(Object source, String key, Object value)
+  {
+    super(source);
+    this.key = key;
+    this.value = value;
+  }
 }

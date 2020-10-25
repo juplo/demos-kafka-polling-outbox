@@ -21,9 +21,9 @@ public class OutboxRepository
   private final JdbcTemplate jdbcTemplate;
 
 
-  public void save(@NotNull OutboxEvent event)
+  public void save(String key, String value)
   {
-    jdbcTemplate.update(SQL_UPDATE, event.getKey(), event.getValue());
+    jdbcTemplate.update(SQL_UPDATE, key, value);
   }
 
   public List<OutboxItem> fetch(@NotNull Long sequenceNumber)
