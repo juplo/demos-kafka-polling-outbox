@@ -15,10 +15,12 @@ import org.springframework.web.util.UriComponents;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.time.Clock;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
-import static de.juplo.boot.data.jdbc.UserEvent.CREATED;
-import static de.juplo.boot.data.jdbc.UserEvent.DELETED;
+import static de.juplo.boot.data.jdbc.UserStatus.CREATED;
+import static de.juplo.boot.data.jdbc.UserStatus.DELETED;
 
 
 @RestController
@@ -30,14 +32,17 @@ public class UserController {
 
 
     private final UserRepository repository;
+    private final Clock clock;
     private final ApplicationEventPublisher publisher;
 
 
     public UserController(
             UserRepository repository,
+            Clock clock,
             ApplicationEventPublisher publisher)
     {
         this.repository = repository;
+        this.clock = clock;
         this.publisher = publisher;
     }
 
@@ -51,7 +56,12 @@ public class UserController {
 
         // Triggering a unique-error for username prevents persistence
         repository.save(user);
-        publisher.publishEvent(new OutboxEvent(this, sanitizedUsername, CREATED));
+        publisher.publishEvent(
+            new OutboxEvent(
+                this,
+                sanitizedUsername,
+                CREATED,
+                ZonedDateTime.now(clock)));
         user = repository.findByUsername(sanitizedUsername);
 
         UriComponents uri =
@@ -80,7 +90,12 @@ public class UserController {
             return ResponseEntity.notFound().build();
 
         repository.delete(user);
-        publisher.publishEvent(new OutboxEvent(this, username, DELETED));
+        publisher.publishEvent(
+            new OutboxEvent(
+                this,
+                user.getUsername(),
+                DELETED,
+                ZonedDateTime.now(clock)));
 
         return ResponseEntity.ok(user);
     }

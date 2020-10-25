@@ -1,3 +1,14 @@
 package de.juplo.boot.data.jdbc;
 
-public enum UserEvent { CREATED, LOGIN, LOGOUT, DELETED }
+import de.juplo.kafka.outbox.OutboxEvent;
+
+import java.time.ZonedDateTime;
+
+
+public class UserEvent extends OutboxEvent
+{
+  public UserEvent(Object source, String key, UserStatus status, ZonedDateTime time)
+  {
+    super(source, key, status, time);
+  }
+}

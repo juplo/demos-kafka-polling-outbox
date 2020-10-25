@@ -5,18 +5,20 @@ import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 
+@Repository
 @AllArgsConstructor
 public class OutboxRepository
 {
   private static final String SQL_QUERY =
       "SELECT id, key, value FROM outbox WHERE id > ?";
   private static final String SQL_UPDATE =
-      "INSERT INTO outbox VALUES (key ?, value, ?)";
+      "INSERT INTO outbox (key, value) VALUES (?, ?)";
 
   private final JdbcTemplate jdbcTemplate;
 
