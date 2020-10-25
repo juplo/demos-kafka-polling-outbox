@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
-public class UserEventListener
+public class OutboxListener
 {
-    private static final Logger LOG = LoggerFactory.getLogger(UserEventListener.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OutboxListener.class);
 
 
     @TransactionalEventListener
