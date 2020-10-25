@@ -3,6 +3,7 @@ package de.juplo.boot.data.jdbc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -46,6 +47,8 @@ public class UserController {
             @RequestBody String username) {
         String sanitizedUsername = UserController.sanitize(username);
         User user = new User(sanitizedUsername, LocalDateTime.now(), false);
+
+        // Triggering a unique-error for username prevents persistence
         repository.save(user);
         publisher.publishEvent(
             new UserEvent(
@@ -53,6 +56,8 @@ public class UserController {
                 sanitizedUsername,
                 CREATED,
                 ZonedDateTime.now(clock)));
+        user = repository.findByUsername(sanitizedUsername);
+
         UriComponents uri =
             builder
                 .fromCurrentRequest()
@@ -100,5 +105,14 @@ public class UserController {
             return "";
 
         return string.trim().toLowerCase();
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> incorrectResultSizeDataAccessException(
+        IncorrectResultSizeDataAccessException e
+        )
+    {
+      LOG.info("User already exists!");
+      return ResponseEntity.badRequest().build();
     }
 }
