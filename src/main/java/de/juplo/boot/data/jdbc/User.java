@@ -2,9 +2,11 @@ package de.juplo.boot.data.jdbc;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
 
+@Table("users")
 public class User {
     @Id
     Long id;
