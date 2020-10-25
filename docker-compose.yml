@@ -31,6 +31,7 @@ services:
     environment:
       GPS_BOOTSTRAP_SERVERS: kafka:9093
       spring.datasource.url: jdbc:postgres://postgres:5432/outbox
+      spring.datasource.driver-class-name: org.postgresql.Driver
       spring.datasource.username: outbox
       spring.datasource.password: outbox
 
