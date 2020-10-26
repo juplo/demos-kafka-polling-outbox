@@ -37,7 +37,10 @@ public class OutboxRepository
     MapSqlParameterSource parameters = new MapSqlParameterSource();
     parameters.addValue("sequenceNumber", sequenceNumber);
     return
-        jdbcTemplate.query(SQL_QUERY, (resultSet, rowNumber) ->
+        jdbcTemplate.query(
+            SQL_QUERY,
+            parameters,
+            (resultSet, rowNumber) ->
             {
               return
                   OutboxItem
@@ -46,8 +49,6 @@ public class OutboxRepository
                       .key(resultSet.getString(1))
                       .value(resultSet.getString(2))
                       .build();
-            },
-            parameters
-            );
+            });
   }
 }
