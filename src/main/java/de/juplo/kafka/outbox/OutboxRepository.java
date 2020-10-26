@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -32,7 +31,7 @@ public class OutboxRepository
     jdbcTemplate.update(SQL_UPDATE, parameters);
   }
 
-  public List<OutboxItem> fetch(@NotNull Long sequenceNumber)
+  public List<OutboxItem> fetch(Long sequenceNumber)
   {
     MapSqlParameterSource parameters = new MapSqlParameterSource();
     parameters.addValue("sequenceNumber", sequenceNumber);
