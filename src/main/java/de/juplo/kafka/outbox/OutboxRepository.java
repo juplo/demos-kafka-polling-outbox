@@ -18,6 +18,8 @@ public class OutboxRepository
       "SELECT id, key, value FROM outbox WHERE id > :sequenceNumber";
   private static final String SQL_UPDATE =
       "INSERT INTO outbox (key, value, issued) VALUES (:key, :value, :issued)";
+  private static final String SQL_DELETE =
+      "DELETE FROM outbox WHERE id = :id";
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -29,6 +31,19 @@ public class OutboxRepository
     parameters.addValue("value", value);
     parameters.addValue("issued", Timestamp.from(issued.toInstant()));
     jdbcTemplate.update(SQL_UPDATE, parameters);
+  }
+
+  public void delete(Long id)
+  {
+    MapSqlParameterSource parameters = new MapSqlParameterSource();
+    parameters.addValue("id", id);
+    jdbcTemplate.query(
+        SQL_DELETE,
+        parameters,
+        (resultSet, rowNumber) ->
+        {
+          return null;
+        });
   }
 
   public List<OutboxItem> fetch(Long sequenceNumber)
