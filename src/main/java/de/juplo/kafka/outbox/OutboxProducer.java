@@ -53,6 +53,7 @@ public class OutboxProducer
     do
     {
       items = repository.fetch(sequenceNumber);
+      LOG.debug("Polled {} new items", items.size());
       for (OutboxItem item : items)
         send(item);
     }

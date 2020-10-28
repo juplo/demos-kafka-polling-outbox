@@ -8,6 +8,13 @@ spring:
   flyway:
     locations: classpath:db/migration/h2
 
+logging:
+  level:
+    de:
+      juplo:
+        kafka:
+          outbox: DEBUG
+
 ---
 
 spring:
