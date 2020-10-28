@@ -1,14 +1,11 @@
 package de.juplo.kafka.outbox;
 
-import org.apache.kafka.common.header.Header;
-import org.apache.kafka.common.header.Headers;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.nio.ByteBuffer;
-import java.util.Iterator;
+import java.time.Duration;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -28,22 +25,24 @@ public class OutboxProducer
 
   private final OutboxRepository repository;
   private final KafkaProducer<String, String> producer;
+  private final String topic;
   private final ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
 
   private long sequenceNumber = 0l;
 
-  public OutboxProducer(OutboxRepository repository)
+  public OutboxProducer(
+      ApplicationProperties properties,
+      OutboxRepository repository)
   {
     this.repository = repository;
 
     Properties props = new Properties();
-    props.put("bootstrap.servers", "kafka:9092");
-    props.put("metadata.max.age.ms", 1000);
-    props.put("linger.ms", 20);
+    props.put("bootstrap.servers", properties.bootstrapServers);
     props.put("key.serializer", StringSerializer.class.getName());
     props.put("value.serializer", StringSerializer.class.getName());
 
     this.producer = new KafkaProducer<>(props);
+    this.topic = properties.topic;
   }
 
   @Scheduled(fixedDelay = 500)
@@ -63,7 +62,7 @@ public class OutboxProducer
   void send(OutboxItem item)
   {
     final ProducerRecord<String, String> record =
-        new ProducerRecord<>("test", item.getKey(), item.getValue());
+        new ProducerRecord<>(topic, item.getKey(), item.getValue());
 
     record.headers().add("SEQ#", buffer.putLong(item.getSequenceNumber()).array());
 
@@ -99,6 +98,6 @@ public class OutboxProducer
   @PreDestroy
   public void close()
   {
-    producer.close(5, TimeUnit.SECONDS);
+    producer.close(Duration.ofSeconds(5));
   }
 }
