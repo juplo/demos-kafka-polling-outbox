@@ -31,7 +31,7 @@ de:
   juplo:
     kafka:
       outbox:
-        bootstrap-servers: kafka:9092
+        bootstrap-servers: kafka:9093
 
 ---
 
@@ -49,5 +49,5 @@ de:
   juplo:
     kafka:
       outbox:
-        bootstrap-servers: localhost:9093
+        bootstrap-servers: localhost:9092
 
