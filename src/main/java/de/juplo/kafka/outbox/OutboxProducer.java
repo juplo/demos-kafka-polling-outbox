@@ -64,9 +64,9 @@ public class OutboxProducer
     final ProducerRecord<String, String> record =
         new ProducerRecord<>(topic, item.getKey(), item.getValue());
 
-    buffer.reset();
     buffer.putLong(item.getSequenceNumber());
     record.headers().add("SEQ#", buffer.array());
+    buffer.reset();
 
     producer.send(record, (metadata, e) ->
     {
