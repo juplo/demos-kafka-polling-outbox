@@ -1,5 +1,6 @@
 package de.juplo.kafka.outbox;
 
+import com.google.common.primitives.Longs;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.nio.ByteBuffer;
@@ -63,9 +64,7 @@ public class OutboxProducer
     final ProducerRecord<String, String> record =
         new ProducerRecord<>(topic, item.getKey(), item.getValue());
 
-    ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-    buffer.putLong(item.getSequenceNumber());
-    record.headers().add("SEQ#", buffer.array());
+    record.headers().add("SEQ#", Longs.toByteArray(sequenceNumber));
 
     producer.send(record, (metadata, e) ->
     {
