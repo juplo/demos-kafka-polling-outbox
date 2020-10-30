@@ -19,6 +19,7 @@ logging:
 
 spring:
   profiles: prod
+
   datasource:
     url: jdbc:postgresql://postgres:5432/outbox
     username: outbox
@@ -36,6 +37,7 @@ de:
 
 spring:
   profiles: dev
+
   datasource:
     url: jdbc:postgresql://localhost:5432/outbox
     username: outbox
