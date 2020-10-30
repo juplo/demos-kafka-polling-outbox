@@ -59,9 +59,9 @@ public class OutboxRepository
               return
                   OutboxItem
                       .builder()
-                      .sequenceNumber(resultSet.getLong(0))
-                      .key(resultSet.getString(1))
-                      .value(resultSet.getString(2))
+                      .sequenceNumber(resultSet.getLong(1))
+                      .key(resultSet.getString(2))
+                      .value(resultSet.getString(3))
                       .build();
             });
   }
