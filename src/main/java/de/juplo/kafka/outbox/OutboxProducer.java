@@ -78,6 +78,8 @@ public class OutboxProducer
             item.getSequenceNumber(),
             record.key(),
             record.value());
+
+        repository.delete(item.getSequenceNumber());
       }
       else
       {
