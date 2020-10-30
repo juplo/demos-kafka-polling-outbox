@@ -26,7 +26,6 @@ public class OutboxProducer
   private final OutboxRepository repository;
   private final KafkaProducer<String, String> producer;
   private final String topic;
-  private final ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
 
   private long sequenceNumber = 0l;
 
@@ -64,9 +63,9 @@ public class OutboxProducer
     final ProducerRecord<String, String> record =
         new ProducerRecord<>(topic, item.getKey(), item.getValue());
 
+    ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
     buffer.putLong(item.getSequenceNumber());
     record.headers().add("SEQ#", buffer.array());
-    buffer.reset();
 
     producer.send(record, (metadata, e) ->
     {
