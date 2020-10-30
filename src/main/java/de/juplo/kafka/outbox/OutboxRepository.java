@@ -33,17 +33,11 @@ public class OutboxRepository
     jdbcTemplate.update(SQL_UPDATE, parameters);
   }
 
-  public void delete(Long id)
+  public int delete(Long id)
   {
     MapSqlParameterSource parameters = new MapSqlParameterSource();
     parameters.addValue("id", id);
-    jdbcTemplate.query(
-        SQL_DELETE,
-        parameters,
-        (resultSet, rowNumber) ->
-        {
-          return null;
-        });
+    return jdbcTemplate.update(SQL_DELETE, parameters);
   }
 
   public List<OutboxItem> fetch(Long sequenceNumber)

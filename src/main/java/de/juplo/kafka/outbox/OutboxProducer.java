@@ -70,16 +70,16 @@ public class OutboxProducer
     {
       if (e == null)
       {
+        int deleted = repository.delete(item.getSequenceNumber());
         LOG.info(
-            "{}/{}:{} - {}:{}={}",
+            "{}/{}:{} - {}:{}={} - deleted: {}",
             metadata.topic(),
             metadata.partition(),
             metadata.offset(),
             item.getSequenceNumber(),
             record.key(),
-            record.value());
-
-        repository.delete(item.getSequenceNumber());
+            record.value(),
+            deleted);
       }
       else
       {
