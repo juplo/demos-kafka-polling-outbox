@@ -3,7 +3,6 @@ package de.juplo.kafka.outbox;
 import com.google.common.primitives.Longs;
 import org.apache.kafka.common.serialization.StringSerializer;
 
-import java.nio.ByteBuffer;
 import java.time.Duration;
 import java.util.List;
 import java.util.Properties;
@@ -64,11 +63,12 @@ public class OutboxProducer
     final ProducerRecord<String, String> record =
         new ProducerRecord<>(topic, item.getKey(), item.getValue());
 
+    sequenceNumber = item.getSequenceNumber();
     record.headers().add("SEQ#", Longs.toByteArray(sequenceNumber));
 
     producer.send(record, (metadata, e) ->
     {
-      if (e == null)
+      if (metadata != null)
       {
         int deleted = repository.delete(item.getSequenceNumber());
         LOG.info(

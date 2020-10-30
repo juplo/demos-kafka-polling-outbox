@@ -15,7 +15,7 @@ import java.util.List;
 public class OutboxRepository
 {
   private static final String SQL_QUERY =
-      "SELECT id, key, value FROM outbox WHERE id > :sequenceNumber";
+      "SELECT id, key, value FROM outbox WHERE id > :sequenceNumber ORDER BY id ASC";
   private static final String SQL_UPDATE =
       "INSERT INTO outbox (key, value, issued) VALUES (:key, :value, :issued)";
   private static final String SQL_DELETE =
