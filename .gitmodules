@@ -1,0 +1,4 @@
+[submodule "data-jdbc"]
+	path = jdbc
+	url = https://juplo.de/git/demos/spring/data-jdbc
+	branch = outbox
