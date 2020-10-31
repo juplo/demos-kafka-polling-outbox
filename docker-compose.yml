@@ -33,6 +33,8 @@ services:
 
   outbox:
     image: polling-outbox:latest
+    environment:
+      spring.profiles.active: prod
     depends_on:
       - postgres
       - kafka
