@@ -44,7 +44,7 @@ public class OutboxProducer
     this.topic = properties.topic;
   }
 
-  @Scheduled(fixedDelay = 500)
+  @Scheduled(fixedDelayString = "${de.juplo.kafka.outbox.interval}")
   public void poll()
   {
     List<OutboxItem> items;
