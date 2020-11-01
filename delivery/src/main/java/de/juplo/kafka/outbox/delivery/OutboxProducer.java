@@ -37,6 +37,10 @@ public class OutboxProducer
 
     Properties props = new Properties();
     props.put("bootstrap.servers", properties.bootstrapServers);
+    props.put("enable.idempotence", "true");
+    props.put("acks", "all");
+    props.put("retries", "10");
+    props.put("max.in.flight.requests.per.connection", "5");
     props.put("key.serializer", StringSerializer.class.getName());
     props.put("value.serializer", StringSerializer.class.getName());
 
