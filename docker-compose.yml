@@ -27,12 +27,12 @@ services:
     ports:
       - 8080:8080
     environment:
-      spring.profiles.active: production
+      spring.profiles.active: prod
     depends_on:
       - postgres
 
   outbox:
-    image: polling-outbox:latest
+    image: outbox-delivery:latest
     environment:
       spring.profiles.active: prod
     depends_on:
