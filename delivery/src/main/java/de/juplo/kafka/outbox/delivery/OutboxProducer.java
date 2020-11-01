@@ -1,4 +1,4 @@
-package de.juplo.kafka.outbox;
+package de.juplo.kafka.outbox.delivery;
 
 import com.google.common.primitives.Longs;
 import org.apache.kafka.common.serialization.StringSerializer;

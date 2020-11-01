@@ -23,16 +23,16 @@ services:
       - zookeeper
 
   jdbc:
-    image: jdbc:latest
+    image: juplo/jdbc:outbox
     ports:
       - 8080:8080
     environment:
-      spring.profiles.active: production
+      spring.profiles.active: prod
     depends_on:
       - postgres
 
   outbox:
-    image: polling-outbox:latest
+    image: juplo/outbox:polling
     environment:
       spring.profiles.active: prod
     depends_on:

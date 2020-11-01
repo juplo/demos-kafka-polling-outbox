@@ -1,4 +1,4 @@
-package de.juplo.kafka.outbox;
+package de.juplo.kafka.outbox.delivery;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

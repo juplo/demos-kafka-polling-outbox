@@ -14,14 +14,13 @@
   </parent>
 
   <groupId>de.juplo.kafka.outbox</groupId>
-  <artifactId>polling-outbox</artifactId>
+  <artifactId>outbox-postage</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>polling-outbox</name>
+  <name>outbox-postage</name>
   <description>Simple example-implementation of the Polling-Outbox-Pattern</description>
 
   <properties>
     <java.version>11</java.version>
-    <guava.version>30.0-jre</guava.version>
   </properties>
 
   <dependencies>
@@ -34,17 +33,16 @@
       <artifactId>spring-boot-starter-json</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.kafka</groupId>
-      <artifactId>kafka-clients</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>${guava.version}</version>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
     </dependency>
     <dependency>
       <groupId>org.postgresql</groupId>
@@ -55,41 +53,6 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>io.fabric8</groupId>
-        <artifactId>docker-maven-plugin</artifactId>
-        <version>0.33.0</version>
-        <configuration>
-          <images>
-            <image>
-              <name>%a:%l</name>
-            </image>
-          </images>
-        </configuration>
-        <executions>
-          <execution>
-             <id>build</id>
-             <phase>package</phase>
-             <goals>
-               <goal>build</goal>
-             </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
 
 </project>

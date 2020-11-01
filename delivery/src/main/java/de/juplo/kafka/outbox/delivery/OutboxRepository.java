@@ -1,4 +1,4 @@
-package de.juplo.kafka.outbox;
+package de.juplo.kafka.outbox.delivery;
 
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
