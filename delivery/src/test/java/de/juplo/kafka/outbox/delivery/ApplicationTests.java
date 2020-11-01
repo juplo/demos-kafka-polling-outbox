@@ -1,4 +1,4 @@
-package de.juplo.kafka.outbox;
+package de.juplo.kafka.outbox.delivery;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

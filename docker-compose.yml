@@ -39,7 +39,7 @@ services:
       - postgres
 
   outbox:
-    image: juplo/polling-outbox:polling-outbox-2-SNAPSHOT
+    image: juplo/outbox-delivery:polling-outbox-2-SNAPSHOT
     environment:
       spring.profiles.active: prod
     depends_on:

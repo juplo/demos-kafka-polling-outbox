@@ -14,8 +14,9 @@
   <description>Simple example-implementation of the Polling-Outbox-Pattern</description>
 
   <modules>
+    <module>postage</module>
     <module>jdbc</module>
-    <module>outbox</module>
+    <module>delivery</module>
   </modules>
 
 </project>

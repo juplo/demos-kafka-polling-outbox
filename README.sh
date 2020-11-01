@@ -5,7 +5,7 @@ then
   docker-compose down -v
   mvn clean
   docker image rm juplo/data-jdbc:polling-outbox-2-SNAPSHOT
-  docker image rm juplo/polling-outbox:polling-outbox-2-SNAPSHOT
+  docker image rm juplo/outbox-delivery:polling-outbox-2-SNAPSHOT
   exit
 fi
 
@@ -13,7 +13,7 @@ docker-compose up -d zookeeper kafka
 
 if [[
   $(docker image ls -q juplo/data-jdbc:polling-outbox-2-SNAPSHOT) == "" ||
-  $(docker image ls -q juplo/polling-outbox:polling-outbox-2-SNAPSHOT) == "" ||
+  $(docker image ls -q juplo/outbox-delivery:polling-outbox-2-SNAPSHOT) == "" ||
   "$1" = "build"
 ]]
 then
@@ -21,7 +21,7 @@ then
 else
   echo "Using image existing images:"
   docker image ls juplo/data-jdbc:polling-outbox-2-SNAPSHOT
-  docker image ls juplo/polling-outbox:polling-outbox-2-SNAPSHOT
+  docker image ls juplo/outbox-delivery:polling-outbox-2-SNAPSHOT
 fi
 
 while ! [[ $(docker-compose exec kafka zookeeper-shell zookeeper:2181 ls /brokers/ids 2> /dev/null) =~ 1001 ]];
