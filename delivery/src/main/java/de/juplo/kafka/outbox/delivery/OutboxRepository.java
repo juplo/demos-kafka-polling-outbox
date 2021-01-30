@@ -19,7 +19,7 @@ public class OutboxRepository
   private static final String SQL_UPDATE =
       "INSERT INTO outbox (key, value, issued) VALUES (:key, :value, :issued)";
   private static final String SQL_DELETE =
-      "DELETE FROM outbox WHERE id = :id";
+      "DELETE FROM outbox WHERE id <= :id";
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
 

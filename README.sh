@@ -46,9 +46,17 @@ done
 
 docker-compose logs -f kafkacat &
 
-echo peter | http :8080/users
-echo franz | http :8080/users
-echo beate | http :8080/users
-http :8080/users
-http DELETE :8080/users/franz
-http :8080/users
+for i in `seq 1 20`;
+do
+  echo peter$i | http :8080/users
+  echo uwe$i | http :8080/users
+  echo simone$i | http :8080/users
+  http DELETE :8080/users/franz$i
+  http DELETE :8080/users/simone$i
+  echo franz$i | http :8080/users
+  echo beate$i | http :8080/users
+  http DELETE :8080/users/uwe$i
+  sleep 1
+done;
+
+sleep 2
