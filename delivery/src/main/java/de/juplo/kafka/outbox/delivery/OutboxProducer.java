@@ -17,8 +17,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PreDestroy;
 
 import static org.apache.kafka.clients.CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG;
-import static org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG;
-import static org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
+import static org.apache.kafka.clients.producer.ProducerConfig.*;
 
 
 @Component
@@ -43,6 +42,7 @@ public class OutboxProducer
     props.put(BOOTSTRAP_SERVERS_CONFIG, properties.bootstrapServers);
     props.put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
     props.put(VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+    props.put(ENABLE_IDEMPOTENCE_CONFIG, true);
 
     this.producer = new KafkaProducer<>(props);
     this.topic = properties.topic;
