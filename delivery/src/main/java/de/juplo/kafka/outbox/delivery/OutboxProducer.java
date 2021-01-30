@@ -16,6 +16,10 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
 
+import static org.apache.kafka.clients.CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG;
+import static org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG;
+import static org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
+
 
 @Component
 public class OutboxProducer
@@ -36,9 +40,9 @@ public class OutboxProducer
     this.repository = repository;
 
     Properties props = new Properties();
-    props.put("bootstrap.servers", properties.bootstrapServers);
-    props.put("key.serializer", StringSerializer.class.getName());
-    props.put("value.serializer", StringSerializer.class.getName());
+    props.put(BOOTSTRAP_SERVERS_CONFIG, properties.bootstrapServers);
+    props.put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+    props.put(VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
     this.producer = new KafkaProducer<>(props);
     this.topic = properties.topic;
