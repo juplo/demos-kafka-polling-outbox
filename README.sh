@@ -26,16 +26,16 @@ trap 'kill $(jobs -p)' EXIT
 
 docker-compose up -d zookeeper kafka
 
-while ! [[ $(zookeeper-shell zookeeper:2181 ls /brokers/ids 2> /dev/null) =~ 1001 ]];
+while ! [[ $(docker-compose exec kafka zookeeper-shell zookeeper:2181 ls /brokers/ids 2> /dev/null) =~ 1001 ]];
 do
   echo "Waiting for kafka...";
   sleep 1;
 done
 
-kafka-topics --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 3 --topic outbox
+docker-compose exec kafka kafka-topics --zookeeper zookeeper:2181 --create --if-not-exists --replication-factor 1 --partitions 3 --topic outbox
 
 
-docker-compose up -d jdbc outbox
+docker-compose up -d jdbc outbox kafkacat
 
 while ! [[ $(http :8080/actuator/health 2>/dev/null | jq -r .status) == "UP" ]];
 do
@@ -44,7 +44,7 @@ do
 done
 
 
-kafkacat -C -b localhost:9092 -t outbox &
+docker-compose logs -f kafkacat &
 
 echo peter | http :8080/users
 echo franz | http :8080/users
