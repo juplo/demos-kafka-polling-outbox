@@ -42,6 +42,7 @@ services:
     image: juplo/outbox:polling
     environment:
       spring.profiles.active: prod
+      logging.level.de.juplo.kafka.outbox: DEBUG
     depends_on:
       - postgres
       - kafka
