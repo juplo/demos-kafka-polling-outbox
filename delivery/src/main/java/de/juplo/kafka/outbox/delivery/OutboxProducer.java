@@ -25,6 +25,7 @@ public class OutboxProducer
 {
   final static Logger LOG = LoggerFactory.getLogger(OutboxProducer.class);
 
+  public final static String HEADER = "#";
 
   private final OutboxRepository repository;
   private final KafkaProducer<String, String> producer;
@@ -68,7 +69,7 @@ public class OutboxProducer
         new ProducerRecord<>(topic, item.getKey(), item.getValue());
 
     sequenceNumber = item.getSequenceNumber();
-    record.headers().add("SEQ#", Longs.toByteArray(sequenceNumber));
+    record.headers().add(HEADER, Longs.toByteArray(sequenceNumber));
 
     producer.send(record, (metadata, e) ->
     {
