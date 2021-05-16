@@ -1,0 +1,53 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+spring:
+  flyway:
+    locations: classpath:db/migration/h2
+
+logging:
+  level:
+    de:
+      juplo:
+        kafka:
+          outbox: DEBUG
+
+---
+
+spring:
+  profiles: prod
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/outbox
+    username: outbox
+    password: outbox
+  flyway:
+    locations: classpath:db/migration/postgres
+
+de:
+  juplo:
+    kafka:
+      outbox:
+        bootstrap-servers: kafka:9093
+
+---
+
+spring:
+  profiles: dev
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/outbox
+    username: outbox
+    password: outbox
+  flyway:
+    locations: classpath:db/migration/postgres
+
+de:
+  juplo:
+    kafka:
+      outbox:
+        bootstrap-servers: localhost:9092
+

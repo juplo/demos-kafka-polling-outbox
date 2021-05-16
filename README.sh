@@ -5,11 +5,15 @@ then
   docker-compose down -v
   mvn clean
   docker image rm juplo/data-jdbc:polling-outbox-2-SNAPSHOT
+  docker image rm juplo/polling-outbox:polling-outbox-2-SNAPSHOT
   exit
 fi
 
+docker-compose up -d zookeeper kafka
+
 if [[
   $(docker image ls -q juplo/data-jdbc:polling-outbox-2-SNAPSHOT) == "" ||
+  $(docker image ls -q juplo/polling-outbox:polling-outbox-2-SNAPSHOT) == "" ||
   "$1" = "build"
 ]]
 then
@@ -17,9 +21,19 @@ then
 else
   echo "Using image existing images:"
   docker image ls juplo/data-jdbc:polling-outbox-2-SNAPSHOT
+  docker image ls juplo/polling-outbox:polling-outbox-2-SNAPSHOT
 fi
 
-docker-compose up -d jdbc
+while ! [[ $(docker-compose exec kafka zookeeper-shell zookeeper:2181 ls /brokers/ids 2> /dev/null) =~ 1001 ]];
+do
+  echo "Waiting for kafka...";
+  sleep 1;
+done
+
+docker-compose exec kafka kafka-topics --zookeeper zookeeper:2181 --create --if-not-exists --replication-factor 1 --partitions 3 --topic outbox
+
+
+docker-compose up -d jdbc outbox kafkacat
 
 while ! [[ $(http :8080/actuator/health 2>/dev/null | jq -r .status) == "UP" ]];
 do
@@ -28,7 +42,7 @@ do
 done
 
 
-docker-compose logs --tail=0 -f jdbc &
+docker-compose logs --tail=0 -f jdbc kafkacat &
 
 for i in `seq 1 7`;
 do
@@ -49,4 +63,5 @@ do
 done;
 
 docker-compose exec postgres psql -Uoutbox -c'SELECT * FROM outbox;' -Ppager=0  outbox
-docker-compose stop
+# "kill" the executions of "docker-compose logs ..."
+docker-compose stop jdbc kafkacat
