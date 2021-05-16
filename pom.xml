@@ -8,7 +8,7 @@
 
   <groupId>de.juplo.kafka.outbox</groupId>
   <artifactId>polling-outbox-parent</artifactId>
-  <version>polling-outbox-2-SNAPSHOT</version>
+  <version>polling-outbox-2</version>
   <packaging>pom</packaging>
   <name>polling-outbox-parent</name>
   <description>Simple example-implementation of the Polling-Outbox-Pattern</description>

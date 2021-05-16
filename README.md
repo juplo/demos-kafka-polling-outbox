@@ -1,7 +1,7 @@
 # Implementation of the Outbox-Pattern for Apache Kafka
 
 This Repository holds the source code for
-[a blog-series that explains a technically complete implementation of the outbox-pattern for Apache Kafka](https://juplo.de/implementing-the-outbox-pattern-with-kafka-part-1-the-outbox-table/).
+[a blog-series that explains a technically complete implementation of the outbox-pattern for Apache Kafka](https://juplo.de/implementing-the-outbox-pattern-with-kafka-part-2-sending-messages-from-the-outbox/).
 
 Execute [README.sh](README.sh) in a shell to demonstrate the example:
 

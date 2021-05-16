@@ -30,7 +30,7 @@ services:
       - kafka
 
   jdbc:
-    image: juplo/data-jdbc:polling-outbox-2-SNAPSHOT
+    image: juplo/data-jdbc:polling-outbox-2
     ports:
       - 8080:8080
     environment:
@@ -39,7 +39,7 @@ services:
       - postgres
 
   outbox:
-    image: juplo/outbox-delivery:polling-outbox-2-SNAPSHOT
+    image: juplo/outbox-delivery:polling-outbox-2
     environment:
       spring.profiles.active: prod
       logging.level.de.juplo.kafka.outbox: DEBUG

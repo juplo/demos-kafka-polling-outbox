@@ -15,7 +15,7 @@
 
   <groupId>de.juplo.kafka.outbox</groupId>
   <artifactId>outbox-delivery</artifactId>
-  <version>polling-outbox-2-SNAPSHOT</version>
+  <version>polling-outbox-2</version>
   <name>Outbox-Delivery (Polling)</name>
   <description>Simple example-implementation of the Outbox-Pattern (polling variant)</description>
 
